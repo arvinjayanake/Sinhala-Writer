@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Sinhala Writer</string>
+    <string name="levelplay_app_key" translatable="false">1f7de01b5</string>
+    <!-- LevelPlay ad unit IDs from Setup > Ad Units. -->
+    <string name="levelplay_banner_ad_unit_id" translatable="false">ey5ygi92gw4kqzlk</string>
+    <string name="levelplay_interstitial_ad_unit_id" translatable="false">4g9gwa5pd83p80w6</string>
+    <string name="levelplay_native_ad_unit_id" translatable="false">lssn4iu37mvnm1p7</string>
+    <string name="levelplay_rewarded_ad_unit_id" translatable="false">wijzcu8qdjny51xw</string>
+    <!-- Meta placement IDs are configured in the LevelPlay dashboard, not passed to its Android SDK. -->
+    <string name="meta_interstitial_placement_id" translatable="false">492806800209796_516351501188659</string>
+    <string name="meta_banner_placement_id" translatable="false">492806800209796_492809630209513</string>
+</resources>

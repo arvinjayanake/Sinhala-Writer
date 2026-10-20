@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Sinhala Vowels -->
+    <string-array name="vowels_sin">
+        <item>අ</item>
+        <item>ආ</item>
+        <item>ඇ</item>
+        <item>ඈ</item>
+        <item>ඉ</item>
+        <item>ඊ</item>
+        <item>උ</item>
+        <item>ඌ</item>
+        <item>සෘ</item>
+        <item>සෲ</item>
+        <item>එ</item>
+        <item>ඒ</item>
+        <item>ඓ</item>
+        <item>ඔ</item>
+        <item>ඕ</item>
+        <item>ඖ</item>
+    </string-array>
+
+    <!-- English Charactors for Sinhala Vowels -->
+    <string-array name="vowels_en">
+        <item>a</item>
+        <item>aa</item>
+        <item>ae</item>
+        <item>aea</item>
+        <item>i</item>
+        <item>ii</item>
+        <item>u</item>
+        <item>uu</item>
+        <item>sru</item>
+        <item>sruu</item>
+        <item>e</item>
+        <item>ea</item>
+        <item>ee</item>
+        <item>o</item>
+        <item>oa</item>
+        <item>au</item>
+    </string-array>
+
+    <!-- Sinhala Consonants -->
+    <string-array name="consonants_sin">
+        <item>ක</item>
+        <item>ඛ</item>
+        <item>ග</item>
+        <item>ඝ</item>
+        <item>ඟ</item>
+        <item>ච</item>
+        <item>ඡ</item>
+        <item>ජ</item>
+        <item>ඣ</item>
+        <item>ඤ</item>
+        <item>ඥ</item>
+        <item>ට</item>
+        <item>ඨ</item>
+        <item>ඩ</item>
+        <item>ඪ</item>
+        <item>ණ</item>
+        <item>ඬ</item>
+        <item>ත</item>
+        <item>ථ</item>
+        <item>ද</item>
+        <item>ධ</item>
+        <item>න</item>
+        <item>ඳ</item>
+        <item>ප</item>
+        <item>ඵ</item>
+        <item>බ</item>
+        <item>භ</item>
+        <item>ම</item>
+        <item>ඹ</item>
+        <item>ය</item>
+        <item>ර</item>
+        <item>ල</item>
+        <item>ව</item>
+        <item>ශ</item>
+        <item>ෂ</item>
+        <item>ස</item>
+        <item>හ</item>
+        <item>ළ</item>
+        <item>්‍ය</item>
+        <item>ෆ</item>
+        <item>ව</item>
+        <!-- RA -->
+        <item>ක්‍ර</item>
+        <item>ඛ්‍ර</item>
+        <item>ග්‍ර</item>
+        <item>ඝ්‍ර</item>
+        <item>ඣ්‍ර</item>
+        <item>ඤ්‍ර</item>
+        <item>ඥ්‍ර</item>
+        <item>ට්‍ර</item>
+        <item>ඨ්‍ර</item>
+        <item>ඩ්‍ර</item>
+        <item>ඪ්‍ර</item>
+        <item>ඬ්‍ර</item>
+        <item>ත්‍ර</item>
+        <item>ථ්‍ර</item>
+        <item>ද්‍ර</item>
+        <item>ධ්‍ර</item>
+        <item>ඳ්‍ර</item>
+        <item>ප්‍ර</item>
+        <item>ඵ්‍ර</item>
+        <item>බ්‍ර</item>
+        <item>භ්‍ර</item>
+        <item>ර්‍ර</item>
+        <item>ව්‍ර</item>
+        <item>ශ්‍ර</item>
+        <item>ෂ්‍ර</item>
+        <item>ස්‍ර</item>
+        <item>හ්‍ර</item>
+        <item>ළ්‍ර</item>
+        <item>ෆ්‍ර</item>
+        <item>ව්‍ර</item>
+    </string-array>
+
+    <!-- Englich Charactors for Consonants -->
+    <string-array name="consonants_eng">
+        <item>k</item>
+        <item>K</item>
+        <item>g</item>
+        <item>G</item>
+        <item>nng</item>
+        <item>ch</item>
+        <item>Ch</item>
+        <item>j</item>
+        <item>J</item>
+        <item>knn</item>
+        <item>gnn</item>
+        <item>t</item>
+        <item>T</item>
+        <item>d</item>
+        <item>D</item>
+        <item>N</item>
+        <item>nnd</item>
+        <item>th</item>
+        <item>Th</item>
+        <item>dh</item>
+        <item>Dh</item>
+        <item>n</item>
+        <item>nndh</item>
+        <item>p</item>
+        <item>P</item>
+        <item>b</item>
+        <item>B</item>
+        <item>m</item>
+        <item>M</item>
+        <item>y</item>
+        <item>r</item>
+        <item>l</item>
+        <item>v</item>
+        <item>sh</item>
+        <item>Sh</item>
+        <item>s</item>
+        <item>h</item>
+        <item>L</item>
+        <item>Y</item>
+        <item>f</item>
+        <item>w</item>
+        <item>kr</item>
+        <item>Kr</item>
+        <item>gr</item>
+        <item>Gr</item>
+        <item>Jr</item>
+        <item>knnr</item>
+        <item>gnnr</item>
+        <item>tr</item>
+        <item>Tr</item>
+        <item>dr</item>
+        <item>Dr</item>
+        <item>nndr</item>
+        <item>thr</item>
+        <item>Thr</item>
+        <item>dhr</item>
+        <item>Dhr</item>
+        <item>nndhr</item>
+        <item>pr</item>
+        <item>Pr</item>
+        <item>br</item>
+        <item>Br</item>
+        <item>rr</item>
+        <item>vr</item>
+        <item>shr</item>
+        <item>Shr</item>
+        <item>sr</item>
+        <item>hr</item>
+        <item>Lr</item>
+        <item>fr</item>
+        <item>wr</item>
+    </string-array>
+
+    <!-- Sinhala Punctuation -->
+    <string-array name="punctuation_sin">
+        <item>ා</item>
+        <item>ැ</item>
+        <item>ෑ</item>
+        <item>ි</item>
+        <item>ී</item>
+        <item>ු</item>
+        <item>ූ</item>
+        <item>ෘ</item>
+        <item>ෙ</item>
+        <item>ේ</item>
+        <item>ෛ</item>
+        <item>ො</item>
+        <item>ෝ</item>
+        <item>ෞ</item>
+        <item>ෟ</item>
+        <item>ෲ</item>
+    </string-array>
+
+    <!-- English Letters for Punctuation -->
+    <string-array name="punctuation_eng">
+        <item>aa</item>
+        <item>ae</item>
+        <item>ea</item>
+        <item>i</item>
+        <item>ii</item>
+        <item>u</item>
+        <item>uu</item>
+        <item>ru</item>
+        <item>e</item>
+        <item>ea</item>
+        <item>ai</item>
+        <item>o</item>
+        <item>oa</item>
+        <item>au</item>
+        <item>ru</item>
+        <item>ruu</item>
+    </string-array>
+
+    <!-- Special Charactors -->
+    <string-array name="special_char_sin">
+        <item>ච්</item>
+        <item>ං</item>
+        <item>ඞ</item>
+        <item>ඍ</item>
+        <item>ඎ</item>
+        <item>ඃ</item>
+    </string-array>
+
+    <!-- English charactors of special Charactors -->
+    <string-array name="special_char_eng">
+        <item>c</item>
+        <item>x</item>
+        <item>X</item>
+        <item>iru</item>
+        <item>iruu</item>
+        <item>H</item>
+    </string-array>
+
+</resources>
