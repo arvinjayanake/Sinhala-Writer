@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
                     english = english,
                     sinhala = sinhala,
                     banner = ads.banner,
+                    bannerSlotVisible = ads.showBannerSlot,
                     onEnglishChange = ::updateEnglish,
                     onSinhalaChange = { sinhala = it },
                     onCopy = ::copySinhala,

@@ -15,8 +15,8 @@ android {
         applicationId = "com.arvin.sinhalawriter"
         minSdk = 24
         targetSdk = 37
-        versionCode = 18
-        versionName = "2.0.8"
+        versionCode = 19
+        versionName = "2.0.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,8 +24,9 @@ android {
     buildTypes {
         release {
             optimization {
-                enable = false
+                enable = true
             }
+            proguardFiles("proguard-rules.pro")
         }
     }
     compileOptions {
@@ -42,26 +43,49 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation("androidx.browser:browser:1.10.0")
-    implementation(platform("com.google.firebase:firebase-bom:35.0.2"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-crashlytics")
-    implementation("com.unity3d.ads-mediation:mediation-sdk:9.6.0")
-    implementation("com.unity3d.ads-mediation:facebook-adapter:5.6.0")
-    implementation("com.facebook.android:audience-network-sdk:6.22.0")
-    implementation("com.unity3d.ads-mediation:unityads-adapter:5.15.0")
-    implementation("com.unity3d.ads:unity-ads:4.21.0")
+    implementation(libs.androidx.browser)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.mediation.sdk)
+    implementation(libs.facebook.adapter)
+    implementation(libs.audience.network.sdk)
+    implementation(libs.unityads.adapter)
+    implementation(libs.unity.ads)
     testImplementation(libs.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+}
+
+// Keep release artifacts tied to the app version and monotonically increasing build number.
+val releaseArtifactName = "sw_${android.defaultConfig.versionName}_${android.defaultConfig.versionCode}"
+base {
+    archivesName = releaseArtifactName
+}
+
+androidComponents {
+    onVariants(selector().withBuildType("release")) { variant ->
+        variant.outputs.forEach { output ->
+            output.outputFileName.set("$releaseArtifactName.apk")
+        }
+    }
+}
+
+// AGP's bundle filename has no VariantOutput override. Export an exact, stable filename.
+val exportReleaseBundle = tasks.register<Copy>("exportReleaseBundle") {
+    from(layout.buildDirectory.file("outputs/bundle/release/$releaseArtifactName-release.aab"))
+    into(layout.buildDirectory.dir("outputs/release"))
+    rename(".*\\.aab", "$releaseArtifactName.aab")
+}
+tasks.matching { it.name == "bundleRelease" }.configureEach {
+    finalizedBy(exportReleaseBundle)
 }

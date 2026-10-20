@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -59,6 +61,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -77,12 +80,13 @@ enum class Screen { Writer, Help, About }
 @Composable
 private fun QuillIcon(modifier: Modifier = Modifier) {
     // The project's launcher foreground contains the original feather and a dark shadow.
-    // Keep its bright feather pixels so the toolbar matches the Flutter icon.
-    val featherOnly = remember {
+    // Use the feather's alpha mask with the current theme's foreground color.
+    val iconColor = MaterialTheme.colorScheme.onSurface
+    val featherOnly = remember(iconColor) {
         ColorFilter.colorMatrix(ColorMatrix(floatArrayOf(
-            0f, 0f, 0f, 0f, 255f,
-            0f, 0f, 0f, 0f, 255f,
-            0f, 0f, 0f, 0f, 255f,
+            0f, 0f, 0f, 0f, iconColor.red * 255f,
+            0f, 0f, 0f, 0f, iconColor.green * 255f,
+            0f, 0f, 0f, 0f, iconColor.blue * 255f,
             2.5f, 0f, 0f, 0f, -380f,
         )))
     }
@@ -101,6 +105,7 @@ fun WriterApp(
     english: TextFieldValue,
     sinhala: TextFieldValue,
     banner: LevelPlayBannerAdView?,
+    bannerSlotVisible: Boolean,
     onEnglishChange: (TextFieldValue) -> Unit,
     onSinhalaChange: (TextFieldValue) -> Unit,
     onCopy: () -> Boolean,
@@ -121,6 +126,7 @@ fun WriterApp(
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val keyboard = LocalSoftwareKeyboardController.current
+    val imeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
 
     BackHandler(screen != Screen.Writer) { onBack() }
 
@@ -186,12 +192,17 @@ fun WriterApp(
             )
         },
         bottomBar = {
-            Box(Modifier.fillMaxWidth().height(50.dp), contentAlignment = Alignment.Center) {
-                if (banner != null) {
-                    AndroidView(
-                        factory = { banner },
-                        modifier = Modifier.fillMaxWidth().height(50.dp),
-                    )
+            if (bannerSlotVisible && !imeVisible) {
+                Box(
+                    Modifier.fillMaxWidth().height(58.dp).padding(top = 8.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    if (banner != null) {
+                        AndroidView(
+                            factory = { banner },
+                            modifier = Modifier.fillMaxWidth().height(50.dp),
+                        )
+                    }
                 }
             }
         },

@@ -2,6 +2,7 @@ package com.arvin.sinhalawriter
 
 import android.app.Activity
 import android.util.Log
+import android.view.View
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -20,12 +21,17 @@ import com.unity3d.mediation.interstitial.LevelPlayInterstitialAdListener
 
 /** Android equivalent of the Flutter writer's banner and interstitial flow. */
 class AdsManager(private val activity: Activity) {
-    var banner by mutableStateOf<LevelPlayBannerAdView?>(null)
-        private set
-
-    private var interstitial: LevelPlayInterstitialAd? = null
     private val bannerId = activity.getString(R.string.levelplay_banner_ad_unit_id).trim()
     private val interstitialId = activity.getString(R.string.levelplay_interstitial_ad_unit_id).trim()
+
+    var banner by mutableStateOf<LevelPlayBannerAdView?>(null)
+        private set
+    // Reserve the slot before the first request so a late ad cannot shift editable content.
+    var showBannerSlot by mutableStateOf(bannerId.isNotEmpty())
+        private set
+
+    private var bannerLoadRequested = false
+    private var interstitial: LevelPlayInterstitialAd? = null
 
     fun initialize() {
         if (bannerId.isEmpty()) {
@@ -49,6 +55,7 @@ class AdsManager(private val activity: Activity) {
             }
 
             override fun onInitFailed(error: LevelPlayInitError) {
+                showBannerSlot = false
                 Log.e(TAG, "LevelPlay initialization failed: ${error.errorMessage}")
             }
         })
@@ -60,6 +67,7 @@ class AdsManager(private val activity: Activity) {
             .setAdSize(LevelPlayAdSize.BANNER)
             .setPlacementName("WRITER_BANNER")
             .build()
+        bannerLoadRequested = false
         banner = LevelPlayBannerAdView(activity, bannerId, config).apply {
             setBannerListener(object : LevelPlayBannerAdViewListener {
                 override fun onAdLoaded(adInfo: LevelPlayAdInfo) {
@@ -86,7 +94,21 @@ class AdsManager(private val activity: Activity) {
                     Log.d(TAG, "Banner left application: $adInfo")
                 }
             })
-            loadAd()
+            // LevelPlay expects the view to be in its container before requesting an ad.
+            addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+                override fun onViewAttachedToWindow(view: View) {
+                    if (!bannerLoadRequested) {
+                        bannerLoadRequested = true
+                        loadAd()
+                    } else {
+                        resumeAutoRefresh()
+                    }
+                }
+
+                override fun onViewDetachedFromWindow(view: View) {
+                    pauseAutoRefresh()
+                }
+            })
         }
     }
 
