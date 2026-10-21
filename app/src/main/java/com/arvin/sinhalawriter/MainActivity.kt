@@ -11,6 +11,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.lifecycle.lifecycleScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -20,6 +21,9 @@ import com.arvin.sinhalawriter.ui.theme.SinhalaWriterTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private lateinit var converter: SinhalaConverter
@@ -45,6 +49,7 @@ class MainActivity : ComponentActivity() {
         } ?: Screen.Writer
 
         initializeFirebase()
+        logAdvertisingId()
         ads = AdsManager(this).also { it.initialize() }
 
         setContent {
@@ -72,6 +77,21 @@ class MainActivity : ComponentActivity() {
                     onCall = { openIntent(Intent(Intent.ACTION_DIAL, Uri.parse("tel:+94771775727"))) },
                     version = packageManager.getPackageInfo(packageName, 0).versionName ?: "2.0.8",
                 )
+            }
+        }
+    }
+
+    private fun logAdvertisingId() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val id = AdvertisingIdClient.getAdvertisingIdInfo(applicationContext).id
+                if (id.isNullOrBlank() || id == "00000000-0000-0000-0000-000000000000") {
+                    Log.i(TAG, "LevelPlay test device Advertising ID unavailable on this device")
+                } else {
+                    Log.i(TAG, "LevelPlay test device Advertising ID: $id")
+                }
+            } catch (error: Exception) {
+                Log.w(TAG, "Could not retrieve Advertising ID for LevelPlay test device", error)
             }
         }
     }

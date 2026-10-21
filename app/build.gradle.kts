@@ -53,6 +53,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.play.services.ads.identifier)
     implementation(libs.mediation.sdk)
     implementation(libs.facebook.adapter)
     implementation(libs.audience.network.sdk)

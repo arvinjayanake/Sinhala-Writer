@@ -1,5 +1,6 @@
 package com.arvin.sinhalawriter
 
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -46,6 +48,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Email
@@ -53,10 +56,12 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -68,6 +73,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -76,6 +82,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 enum class Screen { Writer, Help, About }
+
+private const val WEBSITE_URL = "https://sinhala-writer.web.app/"
+private const val PRIVACY_URL = "https://sinhala-writer.web.app/privacy.html"
+private const val TERMS_URL = "https://sinhala-writer.web.app/terms.html"
 
 @Composable
 private fun QuillIcon(modifier: Modifier = Modifier) {
@@ -168,7 +178,7 @@ fun WriterApp(
                         Box {
                             IconButton(modifier = Modifier.offset(y = 5.dp), onClick = { menuOpen = true }) { Icon(Icons.Default.MoreVert, contentDescription = "More options") }
                             DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
-                                listOf("Clear All", "Share Text", "Help", "About").forEach { item ->
+                                listOf("Clear All", "Share Text", "Help", "Privacy Policy", "Terms", "About").forEach { item ->
                                     DropdownMenuItem(text = { Text(item, fontSize = 18.sp) }, onClick = {
                                         menuOpen = false
                                         when (item) {
@@ -180,6 +190,8 @@ fun WriterApp(
                                             }
                                             "Help" -> onNavigate(Screen.Help)
                                             "About" -> onNavigate(Screen.About)
+                                            "Privacy Policy" -> onOpenLink(PRIVACY_URL)
+                                            "Terms" -> onOpenLink(TERMS_URL)
                                         }
                                     })
                                 }
@@ -343,45 +355,134 @@ private fun AboutScreen(
     onCall: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {
+    val colors = MaterialTheme.colorScheme
+    Column(
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp, vertical = 28.dp),
+    ) {
+        AndroidView(
+            factory = { viewContext ->
+                android.widget.ImageView(viewContext).apply {
+                    setImageResource(R.mipmap.ic_launcher)
+                    contentDescription = "Sinhala Writer"
+                    scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                }
+            },
+            modifier = Modifier.padding(bottom = 16.dp).size(92.dp),
+        )
+        Text(
+            "Sinhala Writer",
+            color = colors.primary,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.ExtraBold,
+        )
+        Text(
+            "Write Sinhala naturally, using an English keyboard.",
+            modifier = Modifier.padding(top = 8.dp),
+            color = colors.onSurfaceVariant,
+            fontSize = 16.sp,
+            lineHeight = 24.sp,
+        )
+        Spacer(Modifier.height(28.dp))
+        HorizontalDivider(color = colors.outlineVariant)
+
+        AboutSection(
+            "About the app",
+            "Sinhala Writer turns words typed with an English keyboard into Sinhala as you write. It makes everyday Sinhala messages and notes easy to compose on your phone.",
+        )
+        AboutSection(
+            "Type and edit",
+            "See the Sinhala result while you type. You can also edit the converted text directly, then copy or share it when it is ready.",
+        )
+        AboutSection(
+            "Keep your work",
+            "Your English draft is saved on this device so you can continue where you left off. Paste text to convert it, or clear both fields to start again.",
+        )
+
+        Spacer(Modifier.height(12.dp))
+        HorizontalDivider(color = colors.outlineVariant)
+        Text(
+            "Developer",
+            modifier = Modifier.padding(top = 24.dp),
+            color = colors.onSurface,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+        )
         Image(
             painter = painterResource(R.drawable.arvin_apps),
             contentDescription = "Arvin Apps",
-            modifier = Modifier.size(100.dp).align(Alignment.CenterHorizontally),
+            modifier = Modifier.padding(top = 16.dp).size(width = 104.dp, height = 78.dp),
+            colorFilter = ColorFilter.tint(colors.onSurface),
         )
-        Spacer(Modifier.height(16.dp))
-        Text("Arvin Apps", Modifier.fillMaxWidth(), fontSize = 24.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-        Spacer(Modifier.height(8.dp))
-        Text("Mobile Specialist", Modifier.fillMaxWidth(), fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
-        Spacer(Modifier.height(16.dp))
-        Text("Sinhala Writer (${version}v)", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        DeveloperDetail("Arvin Apps", Icons.Filled.Business, topPadding = 14.dp, fontWeight = FontWeight.SemiBold)
+        DeveloperDetail("Arvin Jayanake", Icons.Filled.Person)
+        DeveloperDetail("apps.arvin@gmail.com", Icons.Filled.Email, accent = true, onClick = onEmail)
+        DeveloperDetail("+94 77 177 5727", Icons.Filled.Phone, accent = true, onClick = onCall)
+
+        Spacer(Modifier.height(28.dp))
+        HorizontalDivider(color = colors.outlineVariant)
         Text(
-            "The ultimate app for effortless Sinhala typing on your mobile device! Designed to make writing in Sinhala as simple as sending an message.",
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            "Links",
+            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+            color = colors.onSurface,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
         )
-        Spacer(Modifier.height(24.dp))
-        Text("Contact Information", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Email, contentDescription = null)
-            TextButton(onClick = onEmail) { Text("apps.arvin@gmail.com") }
-        }
-        Spacer(Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Phone, contentDescription = null)
-            TextButton(onClick = onCall) { Text("+9477 177 5727") }
-        }
-        Spacer(Modifier.height(24.dp))
-        Text("Connect with me:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Language, contentDescription = null)
-            TextButton(onClick = { onOpenLink("https://arvinapps.com/") }) { Text("Website") }
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Link, contentDescription = null)
-            TextButton(onClick = { onOpenLink("https://www.linkedin.com/in/arvin-jayanake-45a86478/") }) { Text("LinkedIn") }
-        }
+        DeveloperDetail("sinhala-writer.web.app", Icons.Filled.Language, topPadding = 14.dp, accent = true, onClick = { onOpenLink(WEBSITE_URL) })
+        DeveloperDetail("Privacy Policy", Icons.Filled.Link, accent = true, onClick = { onOpenLink(PRIVACY_URL) })
+        DeveloperDetail("Terms", Icons.Filled.Link, accent = true, onClick = { onOpenLink(TERMS_URL) })
+
+        Text(
+            "Version $version",
+            modifier = Modifier.padding(top = 28.dp, bottom = 16.dp),
+            color = colors.onSurfaceVariant,
+            fontSize = 13.sp,
+        )
+    }
+}
+
+@Composable
+private fun AboutSection(title: String, body: String) {
+    val colors = MaterialTheme.colorScheme
+    Text(
+        title,
+        modifier = Modifier.padding(top = 24.dp),
+        color = colors.onSurface,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+    )
+    Text(
+        body,
+        modifier = Modifier.padding(top = 8.dp),
+        color = colors.onSurfaceVariant,
+        fontSize = 15.sp,
+        lineHeight = 23.sp,
+    )
+}
+
+@Composable
+private fun DeveloperDetail(
+    text: String,
+    icon: ImageVector,
+    topPadding: Dp = 4.dp,
+    fontWeight: FontWeight = FontWeight.Normal,
+    accent: Boolean = false,
+    onClick: (() -> Unit)? = null,
+) {
+    val color = if (accent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+    Row(
+        modifier = Modifier.padding(top = topPadding).then(if (onClick == null) Modifier else Modifier.clickable(onClick = onClick)),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, contentDescription = null, modifier = Modifier.size(16.dp), tint = color)
+        Text(
+            text,
+            modifier = Modifier.padding(start = 8.dp),
+            color = color,
+            fontSize = 16.sp,
+            fontWeight = fontWeight,
+            lineHeight = 24.sp,
+        )
     }
 }
